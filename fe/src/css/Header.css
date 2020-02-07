@@ -1,0 +1,29 @@
+.Header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  justify-content: center;
+  font-size: calc(5px + 2vmin);
+  color: white;
+}
+
+.Header p {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-right: 10px;
+}
+
+.Header a {
+	margin-left: 20px;
+	color: white;
+	border-width: 1px;
+	border-color: white;
+}
+
+.Header hr {
+	color: white;
+	size: 1px;
+	margin: 0px;
+}

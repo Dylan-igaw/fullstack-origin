@@ -1,0 +1,31 @@
+.Game {
+  margin-top: 10vh;
+  flex-direction: row;
+  background-color: #282c34;
+  min-height: 70vh;
+  min-width: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.Game-header{
+}
+
+.Game-info {
+  margin-left: 80px;
+}
+
+.square {
+  background: #fff;
+  border: 1px solid #999;
+  float: left;
+  font-size: 120px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 150px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 150px;
+}
