@@ -1,11 +1,17 @@
-import React from 'react';
+import * as React from 'react';
 import '../css/Home.css';
-import logo from '../resource/logo.svg';
 import Login from './Login-popup';
 import {Button, Segment} from 'semantic-ui-react'
+// @ts-ignore
+import logo from "../resource/logo.svg";
 
-export default class Home extends React.Component {
-    constructor(props) {
+interface HomeProps {
+    loginId:string,
+    showPopup:boolean
+}
+
+export default class Home extends React.Component<any, HomeProps> {
+    constructor(props: any) {
         super(props);
         this.state = {
             loginId: '',
@@ -13,7 +19,7 @@ export default class Home extends React.Component {
         }
     }
 
-    setLoginId = (id) => {
+    setLoginId = (id: string) => {
         this.setState({
             loginId: id,
         });
@@ -34,7 +40,7 @@ export default class Home extends React.Component {
 
     closePopup = () => {
         this.setState({
-            showPopup: false,
+            showPopup: false
         });
     };
 

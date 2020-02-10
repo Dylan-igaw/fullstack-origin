@@ -1,13 +1,13 @@
-import React from "react";
+import * as React from "react";
 import '../css/Game.css';
 
-const Square = (props) =>
+const Square = (props:any) =>
     <button className="square" onClick={props.onClick}>
         {props.value}
     </button>;
 
-class Board extends React.Component {
-    renderSquare(i) {
+class Board extends React.Component<any, any> {
+    renderSquare(i:number) {
         return (
             <Square
                 value={this.props.squares[i]}
@@ -39,8 +39,15 @@ class Board extends React.Component {
     }
 }
 
-export default class Game extends React.Component {
-    constructor(props) {
+interface GameProps {
+    logged: string,
+    history: any[],
+    stepNumber: number,
+    xIsNext: boolean
+}
+
+export default class Game extends React.Component<any, GameProps> {
+    constructor(props:any) {
         super(props);
         this.state = {
             logged: '',
@@ -54,7 +61,7 @@ export default class Game extends React.Component {
         };
     }
 
-    handleClick(i) {
+    handleClick(i:number) {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[history.length - 1];
         const squares = current.squares.slice();
@@ -69,14 +76,14 @@ export default class Game extends React.Component {
         });
     }
 
-    jumpTo(step) {
+    jumpTo(step:number) {
         this.setState({
             stepNumber: step,
             xIsNext: (step % 2) === 0
         });
     }
 
-    calculateWinner(squares) {
+    calculateWinner(squares:any[]) {
         const lines = [
             [0, 1, 2],
             [3, 4, 5],
@@ -123,7 +130,7 @@ export default class Game extends React.Component {
                 <div className="Game-header">
                     <Board
                         squares={current.squares}
-                        onClick={i => this.handleClick(i)}
+                        onClick={(i:number) => this.handleClick(i)}
                     />
                 </div>
                 <div className="Game-info">
