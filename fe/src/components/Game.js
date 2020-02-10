@@ -56,7 +56,6 @@ export default class Game extends React.Component {
 
     handleClick(i) {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
-        //게임 이력에 대한 복기가 가능하게 해주는 부분입니다.
         const current = history[history.length - 1];
         const squares = current.squares.slice();
         if (this.calculateWinner(squares) || squares[i]) {
@@ -64,9 +63,7 @@ export default class Game extends React.Component {
         }
         squares[i] = this.state.xIsNext ? 'X' : 'O';
         this.setState({
-            history: history.concat([
-                {squares}
-            ]),
+            history: [...history, {squares}],
             stepNumber: history.length,
             xIsNext: !this.state.xIsNext
         });
