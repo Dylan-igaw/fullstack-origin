@@ -1,33 +1,16 @@
 import React from 'react';
 import '../css/Login-popup.css';
 
+const id='test';
+const pw='123';
 
 export class Login extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
-			id: "test",
-			pw: "123",
 			xid: "",
-			xpw: "",
-			logged: false
+			xpw: ""
 		}
-	}
-
-	onLogin = () => {
-		this.setState({
-			logged: true
-		});
-	}
-
-	onLogout = () => {
-		this.setState({
-			logged: false,
-			xid: '',
-			xpw: ''
-		});
-
-		window.sessionStorage.clear();
 	}
 
 	handleChangeId = (event) => {
@@ -39,15 +22,13 @@ export class Login extends React.Component{
 	}
 
 	handleSubmit = (event) => {
-		if(this.state.id === this.state.xid && this.state.pw === this.state.xpw){
-			window.sessionStorage.setItem('id', this.state.xid);
-			this.onLogin();
+		const {xid, xpw} = this.state;
+		if(id === xid && pw === xpw){
+			sessionStorage.setItem("id", id);
+			this.props.setId(id);
 			this.props.closePopup();
-
-			alert("login");
 		}else{
-			alert("login failed."+ this.state.xid + ' ' + this.state.xpw);
-			this.onLogout();
+			alert("login failed:: "+ xid + '/' + xpw);
 		}
 		event.preventDefault();
 	}

@@ -1,60 +1,65 @@
 import React from 'react';
-import logo from '../resource/logo.svg';
 import '../css/Home.css';
+import logo from '../resource/logo.svg';
 import Login from './Login-popup';
+import '../reducers/loginTask';
+import '../actions/login';
 import { Button, Segment } from 'semantic-ui-react'
 
-class Home extends React.Component{
+export default class Home extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
+      loginId: '',
       showPopup: false,
-      checkLogin: window.sessionStorage.getItem("id")
-    };
+    }
   }
 
-  togglePopup() {
-    if(this.state.checkLogin === null){
+  setLoginId = (id) => {
+    this.setState({
+      loginId: id,
+    });
+  }
+
+  getLoginId = () => {
+    return this.state.loginId;
+  }
+
+  togglePopup = () => {
+    if(this.state.loginId === ''){
       this.setState({
         showPopup: !this.state.showPopup
       });
-    }else {
-      window.sessionStorage.clear();
+    }else{
+      sessionStorage.clear();
       this.setState({
-        showPopup: false,
-        checkLogin: ''
+        loginId: ''
       });
     }
+  }
 
+  closePopup = () =>{
+    this.setState({
+      showPopup: false,
+    });
   }
 
   render(){
     return(
         <div className="Home">
-          <header className="Home-header">
-            <img src={logo} className="Home-logo" alt="logo" />
-            <p>
-              TEST: CREATE REACT APP ..
-            </p>
-           
-            <Segment inverted>
-              <Button inverted color='teal' onClick={this.togglePopup.bind(this)}>
-                {this.state.checkLogin === null ? "Sign In" : "Sign Out" }
-              </Button>
-            </Segment>
-            
-            {this.state.showPopup ?
-              <Login
-                text='close'
-                closePopup={this.togglePopup.bind(this)}
-              />
-              : null
-            }
+          <img src={logo} className="Home-logo" alt="logo" />
+          <p>
+            TEST: CREATE REACT APP
+          </p>
 
-          </header>
+          <Segment inverted>
+            <Button inverted color='teal' onClick={this.togglePopup}>
+              {(this.state.loginId === '') ? "Sign In" : "Sign Out"}
+            </Button>
+          </Segment>
+
+          {this.state.showPopup && <Login closePopup={this.closePopup} setId={this.setLoginId}/>}
         </div>
     );
   }
 }
-
-export default Home;

@@ -3,34 +3,30 @@ import {BrowserRouter as Router, Link, Route, Switch} from 'react-router-dom'
 import './css/Header.css';
 import Home from './components/Home';
 import Game from "./components/Game";
-  
 
 class App extends React.Component{
+
+    routeEventHandle = (event) =>{
+        if(sessionStorage.getItem("id") === null){
+            alert("로그인 후 이용해 주세요");
+        }
+    }
+
   render() {
     return (
         <div className="Header">
           <Router>
-            <div>
               <nav>
-                <p>
-                  <Link to="/home">Home</Link>
-                  <Link to="/game">Game</Link>
-                </p>
+                  <Link to="/home" className="Header-link">Home</Link>
+                  <Link to="/game" className="Header-link" onClick={this.routeEventHandle}>Game</Link>
               </nav>
-            </div>
             <hr/>
             {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
-            <div>
               <Switch>
-                <Route path="/game">
-                  <Game />
-                </Route>
-                <Route path="/">
-                  <Home />
-                </Route>
+                <Route path="/game" component={Game} />
+                <Route path="/" component={Home} />
               </Switch>
-            </div>
           </Router>
         </div>
 

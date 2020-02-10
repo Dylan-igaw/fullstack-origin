@@ -9,13 +9,7 @@
   color: white;
 }
 
-.Header p {
-	margin-top: 0px;
-	margin-bottom: 0px;
-	margin-right: 10px;
-}
-
-.Header a {
+.Header-link {
 	margin-left: 20px;
 	color: white;
 	border-width: 1px;
