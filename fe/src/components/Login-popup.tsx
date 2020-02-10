@@ -1,15 +1,21 @@
 import * as React from 'react';
 import '../css/Login-popup.css';
+import {} from './Home';
 
 const id = 'test';
 const pw = '123';
 
 interface LoginProps {
+    setId(id: any): any,
+    closePopup(): any
+}
+
+interface LoginStates {
     insertId: string,
     insertPw: string
 }
 
-export class Login extends React.Component<any, LoginProps> {
+export class Login extends React.Component<LoginProps, LoginStates> {
     constructor(props: any) {
         super(props);
         this.state = {

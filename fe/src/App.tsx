@@ -4,21 +4,14 @@ import './css/Header.css';
 import Home from './components/Home';
 import Game from "./components/Game";
 
-class App extends React.Component {
-
-    routeEventHandle = () => {
-        if (sessionStorage.getItem("id") === null) {
-            alert("로그인 후 이용해 주세요");
-        }
-    };
-
+class App extends React.Component<any, any> {
     render() {
         return (
             <div className="Header">
                 <Router>
                     <nav>
                         <Link to="/home" className="Header-link">Home</Link>
-                        <Link to="/game" className="Header-link" onClick={this.routeEventHandle}>Game</Link>
+                        <Link to="/game" className="Header-link">Game</Link>
                     </nav>
                     <hr/>
                     <Switch>
@@ -27,7 +20,6 @@ class App extends React.Component {
                     </Switch>
                 </Router>
             </div>
-
         )
     }
 }

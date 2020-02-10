@@ -1,40 +1,39 @@
 import * as React from 'react';
 import '../css/Home.css';
 import Login from './Login-popup';
-import {Button, Segment} from 'semantic-ui-react'
 // @ts-ignore
 import logo from "../resource/logo.svg";
 
 interface HomeProps {
-    loginId:string,
-    showPopup:boolean
+    loginId: any,
+    showPopup: boolean
 }
 
 export default class Home extends React.Component<any, HomeProps> {
     constructor(props: any) {
         super(props);
         this.state = {
-            loginId: '',
+            loginId: null,
             showPopup: false,
         }
     }
 
-    setLoginId = (id: string) => {
+    setLoginId = (id: any) => {
         this.setState({
             loginId: id,
         });
     };
 
     togglePopup = () => {
-        if (this.state.loginId === '') {
+        if (this.state.loginId === null) {
             this.setState({
                 showPopup: !this.state.showPopup
             });
         } else {
-            sessionStorage.clear();
             this.setState({
-                loginId: ''
+                loginId: null
             });
+            sessionStorage.clear();
         }
     };
 
@@ -49,14 +48,12 @@ export default class Home extends React.Component<any, HomeProps> {
             <div className="Home">
                 <img src={logo} className="Home-logo" alt="logo"/>
                 <p>
-                    TEST: CREATE REACT APP
+                    CREATE REACT APP: test/123
                 </p>
 
-                <Segment inverted>
-                    <Button inverted color='teal' onClick={this.togglePopup}>
-                        {(this.state.loginId === '') ? "Sign In" : "Sign Out"}
-                    </Button>
-                </Segment>
+                <button onClick={this.togglePopup}>
+                    {(this.state.loginId === null) ? "Sign In" : "Sign Out"}
+                </button>
 
                 {this.state.showPopup && <Login closePopup={this.closePopup} setId={this.setLoginId}/>}
             </div>
