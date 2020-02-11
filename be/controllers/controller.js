@@ -62,11 +62,12 @@ function postList(req, res) {
  * @param req
  * response
  * {
- *     "logged" : {boolean}
+ *     "checked" : {boolean}
  * }
  * @param res
  */
 function loginCheck(req, res) {
+    console.log(req);
     const id = 'test';
     const pw = '123';
     const insertId = req.body.insertId;
@@ -79,7 +80,7 @@ function loginCheck(req, res) {
 
     res.status(200).json(
         {
-            "logged" : logged
+            "checked" : logged
         }
     );
 }

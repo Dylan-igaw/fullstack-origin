@@ -4,9 +4,6 @@ import {observer} from "mobx-react";
 import {action, observable} from "mobx";
 import {ChangeEvent, FormEvent} from "react";
 
-const id = 'test';
-const pw = '123';
-
 interface LoginProps {
     setId(): void,
     closePopup(): void
@@ -32,15 +29,43 @@ export class Login extends React.Component<LoginProps> {
 
     @action
     handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-        if (id === this.insertId && pw === this.insertPw) {
-            sessionStorage.setItem("id", id);
-            this.props.setId();
-            this.props.closePopup();
-        } else {
-            alert("login failed:: " + this.insertId + '/' + this.insertPw);
-        }
+        this.doPost();
         event.preventDefault();
-    };
+    }
+
+    @action
+    doPost = () => {
+        let url: string = 'http://localhost:3001/login';
+        let data: object = {
+            "insertId": this.insertId,
+            "insertPw": this.insertPw
+        };
+        let header: object = {
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            mode: 'cors', // no-cors, cors, *same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, *same-origin, omit
+            headers: {
+                'Content-Type': 'application/json',
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            redirect: 'follow', // manual, *follow, error
+            referrer: 'no-referrer', // no-referrer, *client
+            body: JSON.stringify(data), // body data type must match "Content-Type" header
+        };
+
+        fetch(url, header)
+            .then(response => response.json())
+            .then(result => {
+                if (result.checked) {
+                    sessionStorage.setItem("id", this.insertId);
+                    this.props.setId();
+                    this.props.closePopup();
+                } else {
+                    alert("login failed.");
+                }
+            });
+    }
 
     render() {
         return (
