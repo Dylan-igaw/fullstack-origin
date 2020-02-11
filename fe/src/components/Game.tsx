@@ -1,13 +1,31 @@
 import * as React from "react";
 import {Link} from 'react-router-dom'
 import '../css/Game.css';
+import {observer} from "mobx-react";
+import {action, observable} from "mobx";
+import {Component} from "react";
 
-const Square = (props: any) =>
-    <button className="square" onClick={props.onClick}>
-        {props.value}
-    </button>;
+interface squareProps {
+    value: string,
+    onClick(): void
+}
 
-class Board extends React.Component<any, any> {
+class Square extends Component<squareProps>{
+    render(){
+        return(
+            <button className="square" onClick={this.props.onClick}>
+                {this.props.value}
+            </button>
+        );
+    }
+}
+
+interface boardProps {
+    squares: string[],
+    onClick(i: number): void
+}
+
+class Board extends React.Component<boardProps> {
     renderSquare(i: number) {
         return (
             <Square
@@ -40,51 +58,43 @@ class Board extends React.Component<any, any> {
     }
 }
 
-interface GameProps {
-    logged: string,
-    history: any[],
-    stepNumber: number,
-    xIsNext: boolean
+interface square {
+    squares: string[]
 }
 
-export default class Game extends React.Component<any, GameProps> {
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            logged: '',
-            history: [
-                {
-                    squares: Array(9).fill(null)
-                }
-            ],
-            stepNumber: 0,
-            xIsNext: true
-        };
-    }
+@observer
+export default class Game extends React.Component<any, square> {
+    @observable
+    private history: square[] = [{"squares" : Array(9).fill(null)}];
 
+    @observable
+    private stepNumber: number = 0;
+
+    @observable
+    private xIsNext: boolean = true;
+
+    @action
     handleClick(i: number) {
-        const history = this.state.history.slice(0, this.state.stepNumber + 1);
+        const history = this.history.slice(0, this.stepNumber + 1);
         const current = history[history.length - 1];
         const squares = current.squares.slice();
         if (this.calculateWinner(squares) || squares[i]) {
             return;
         }
-        squares[i] = this.state.xIsNext ? 'X' : 'O';
-        this.setState({
-            history: [...history, {squares}],
-            stepNumber: history.length,
-            xIsNext: !this.state.xIsNext
-        });
+        squares[i] = this.xIsNext ? 'X' : 'O';
+        this.history = [...history, {squares}];
+        this.stepNumber = history.length;
+        this.xIsNext = !this.xIsNext;
     }
 
+    @action
     jumpTo(step: number) {
-        this.setState({
-            stepNumber: step,
-            xIsNext: (step % 2) === 0
-        });
+        this.stepNumber = step;
+        this.xIsNext = (step % 2) === 0;
     }
 
-    calculateWinner(squares: any[]) {
+    @action
+    calculateWinner(squares: string[]) {
         const lines = [
             [0, 1, 2],
             [3, 4, 5],
@@ -105,6 +115,7 @@ export default class Game extends React.Component<any, GameProps> {
     }
 
     render() {
+        console.log(this.history);
         let returnHtml: any;
         const loginId = sessionStorage.getItem("id");
         if (loginId === null) {
@@ -115,8 +126,8 @@ export default class Game extends React.Component<any, GameProps> {
                     </div>
                 </div>
         } else {
-            const history = this.state.history;
-            const current = history[this.state.stepNumber];
+            const history = this.history;
+            const current = history[this.stepNumber];
             const winner = this.calculateWinner(current.squares);
 
             const moves = history.map((step, move) => {
@@ -133,7 +144,7 @@ export default class Game extends React.Component<any, GameProps> {
             if (winner) {
                 status = "Winner: " + winner;
             } else {
-                status = "Next player: " + (this.state.xIsNext ? "X" : "O");
+                status = "Next player: " + (this.xIsNext ? "X" : "O");
             }
 
             returnHtml =

@@ -1,46 +1,42 @@
 import * as React from 'react';
 import '../css/Home.css';
+import {observable, action} from "mobx";
+import {observer} from "mobx-react";
 import Login from './Login-popup';
 // @ts-ignore
 import logo from "../resource/logo.svg";
 
-interface HomeProps {
-    loginId: any,
-    showPopup: boolean
-}
+@observer
+export default class Home extends React.Component<any> {
 
-export default class Home extends React.Component<any, HomeProps> {
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            loginId: null,
-            showPopup: false,
-        }
+    @observable
+    private loginId: string = '';
+    @observable
+    private showPopup: boolean = false;
+
+    @action
+    setShowPopup = (state: boolean) => {
+        this.showPopup = state;
     }
 
-    setLoginId = (id: any) => {
-        this.setState({
-            loginId: id,
-        });
+    @action
+    setLoginId = (id: string) => {
+        this.loginId = id;
     };
 
+    @action
     togglePopup = () => {
-        if (this.state.loginId === null) {
-            this.setState({
-                showPopup: !this.state.showPopup
-            });
+        if (this.loginId === '') {
+            this.setShowPopup(!this.showPopup);
         } else {
-            this.setState({
-                loginId: null
-            });
+            this.setLoginId('');
             sessionStorage.clear();
         }
     };
 
+    @action
     closePopup = () => {
-        this.setState({
-            showPopup: false
-        });
+        this.showPopup = false;
     };
 
     render() {
@@ -52,10 +48,10 @@ export default class Home extends React.Component<any, HomeProps> {
                 </p>
 
                 <button onClick={this.togglePopup}>
-                    {(this.state.loginId === null) ? "Sign In" : "Sign Out"}
+                    {(this.loginId === '') ? "Sign In" : "Sign Out"}
                 </button>
 
-                {this.state.showPopup && <Login closePopup={this.closePopup} setId={this.setLoginId}/>}
+                {this.showPopup && <Login closePopup={this.closePopup} setId={this.setLoginId}/>}
             </div>
         );
     }

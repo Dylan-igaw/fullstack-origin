@@ -1,46 +1,44 @@
 import * as React from 'react';
 import '../css/Login-popup.css';
-import {} from './Home';
+import {observer} from "mobx-react";
+import {action, observable} from "mobx";
+import {ChangeEvent, FormEvent} from "react";
 
 const id = 'test';
 const pw = '123';
 
 interface LoginProps {
-    setId(id: any): any,
-    closePopup(): any
+    setId(id: string): void,
+
+    closePopup(): void
 }
 
-interface LoginStates {
-    insertId: string,
-    insertPw: string
-}
+@observer
+export class Login extends React.Component<LoginProps> {
+    @observable
+    private insertId: string = '';
 
-export class Login extends React.Component<LoginProps, LoginStates> {
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            insertId: '',
-            insertPw: ''
-        };
-    }
+    @observable
+    private insertPw: string = '';
 
-    handleChangeId = (event: any) => {
-        this.setState({insertId: event.target.value});
+    @action
+    handleChangeId = (event: ChangeEvent<HTMLInputElement>) => {
+        this.insertId = event.target.value;
     };
 
-    handleChangePw = (event: any) => {
-        this.setState({insertPw: event.target.value});
+    @action
+    handleChangePw = (event: ChangeEvent<HTMLInputElement>) => {
+        this.insertPw = event.target.value;
     };
 
-    handleSubmit = (event: any) => {
-        const {insertId, insertPw} = this.state;
-
-        if (id === insertId && pw === insertPw) {
+    @action
+    handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+        if (id === this.insertId && pw === this.insertPw) {
             sessionStorage.setItem("id", id);
             this.props.setId(id);
             this.props.closePopup();
         } else {
-            alert("login failed:: " + insertId + '/' + insertPw);
+            alert("login failed:: " + this.insertId + '/' + this.insertPw);
         }
         event.preventDefault();
     };
@@ -50,10 +48,13 @@ export class Login extends React.Component<LoginProps, LoginStates> {
             <form onSubmit={this.handleSubmit}>
                 <div className="Login-popup">
                     <div className="Login-inner">
-                        <p>Login <button onClick={this.props.closePopup}>close</button></p>
-                        <label htmlFor="id">ID</label> <input type="text" id="id" value={this.state.insertId}
+                        <p>Login <input type="button" className="close-btn" onClick={this.props.closePopup}
+                                        value="close"/></p>
+                        <label htmlFor="id">ID</label> <input type="text" className="login-input" id="id"
+                                                              value={this.insertId}
                                                               onChange={this.handleChangeId}/>
-                        <label htmlFor="pw">PW</label> <input type="password" id="pw" value={this.state.insertPw}
+                        <label htmlFor="pw">PW</label> <input className="login-input" type="password" id="pw"
+                                                              value={this.insertPw}
                                                               onChange={this.handleChangePw}/>
                         <input type="submit" value="login"/>
                     </div>
