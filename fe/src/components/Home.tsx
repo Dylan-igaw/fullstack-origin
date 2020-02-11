@@ -10,7 +10,7 @@ import logo from "../resource/logo.svg";
 export default class Home extends React.Component<any> {
 
     @observable
-    private loginId: string = '';
+    private loginId: string | null = sessionStorage.getItem("id");
     @observable
     private showPopup: boolean = false;
 
@@ -20,17 +20,17 @@ export default class Home extends React.Component<any> {
     }
 
     @action
-    setLoginId = (id: string) => {
-        this.loginId = id;
+    setLoginId = () => {
+        this.loginId = sessionStorage.getItem("id");
     };
 
     @action
     togglePopup = () => {
-        if (this.loginId === '') {
+        if (this.loginId === null) {
             this.setShowPopup(!this.showPopup);
         } else {
-            this.setLoginId('');
             sessionStorage.clear();
+            this.setLoginId();
         }
     };
 
@@ -48,7 +48,7 @@ export default class Home extends React.Component<any> {
                 </p>
 
                 <button onClick={this.togglePopup}>
-                    {(this.loginId === '') ? "Sign In" : "Sign Out"}
+                    {(this.loginId === null) ? "Sign In" : "Sign Out"}
                 </button>
 
                 {this.showPopup && <Login closePopup={this.closePopup} setId={this.setLoginId}/>}

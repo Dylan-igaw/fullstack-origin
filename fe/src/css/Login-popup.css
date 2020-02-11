@@ -23,7 +23,7 @@
 }
 
 .Login-inner p {
-    margin-top: 0%;
+    margin-top: 0;
     text-align: left;
     background: #81DAF5;
 }
@@ -36,6 +36,6 @@
 }
 
 .close-btn {
-    margin-top: 0px;
+    margin-top: 0;
     margin-left: 75%;
 }

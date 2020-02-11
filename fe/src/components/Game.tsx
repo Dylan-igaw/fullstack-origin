@@ -73,6 +73,9 @@ export default class Game extends React.Component<any, square> {
     @observable
     private xIsNext: boolean = true;
 
+    @observable
+    private loginId:string | null = sessionStorage.getItem("id");
+
     @action
     handleClick(i: number) {
         const history = this.history.slice(0, this.stepNumber + 1);
@@ -117,8 +120,7 @@ export default class Game extends React.Component<any, square> {
     render() {
         console.log(this.history);
         let returnHtml: any;
-        const loginId = sessionStorage.getItem("id");
-        if (loginId === null) {
+        if (this.loginId === null) {
             returnHtml =
                 <div className="Game">
                     <div className="Game-header">
@@ -140,12 +142,7 @@ export default class Game extends React.Component<any, square> {
                 );
             });
 
-            let status;
-            if (winner) {
-                status = "Winner: " + winner;
-            } else {
-                status = "Next player: " + (this.xIsNext ? "X" : "O");
-            }
+            let status = winner ? `Winner: ${winner}` : `Next player: ${this.xIsNext ? "X" : "O"}`;
 
             returnHtml =
                 <div className="Game">

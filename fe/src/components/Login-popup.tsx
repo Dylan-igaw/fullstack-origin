@@ -8,8 +8,7 @@ const id = 'test';
 const pw = '123';
 
 interface LoginProps {
-    setId(id: string): void,
-
+    setId(): void,
     closePopup(): void
 }
 
@@ -35,7 +34,7 @@ export class Login extends React.Component<LoginProps> {
     handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         if (id === this.insertId && pw === this.insertPw) {
             sessionStorage.setItem("id", id);
-            this.props.setId(id);
+            this.props.setId();
             this.props.closePopup();
         } else {
             alert("login failed:: " + this.insertId + '/' + this.insertPw);
