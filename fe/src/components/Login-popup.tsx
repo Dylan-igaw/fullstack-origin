@@ -3,10 +3,11 @@ import '../css/Login-popup.css';
 import {observer} from "mobx-react";
 import {action, observable} from "mobx";
 import {ChangeEvent, FormEvent} from "react";
+import cookie from 'react-cookies';
 
 interface LoginProps {
     setId(): void,
-    closePopup(): void
+    closePopup(): void,
 }
 
 @observer
@@ -33,37 +34,55 @@ export class Login extends React.Component<LoginProps> {
         event.preventDefault();
     }
 
-    @action
-    doPost = () => {
-        let url: string = 'http://localhost:3001/login';
-        let data: object = {
-            "insertId": this.insertId,
-            "insertPw": this.insertPw
-        };
+    /*
+    --HTTP HEADER
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: 'cors', // no-cors, cors, *same-origin
+        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'include,', // include, *same-origin, omit
+        headers: {
+            'Content-Type': 'application/json',
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: 'follow', // manual, *follow, error
+        referrer: 'no-referrer', // no-referrer, *client
+        body: JSON.stringify(data), // body data type must match "Content-Type" header
+     */
+    returnObject = (insert: object):object => {
+        let data: object = insert;
         let header: object = {
-            method: 'POST', // *GET, POST, PUT, DELETE, etc.
-            mode: 'cors', // no-cors, cors, *same-origin
-            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: 'same-origin', // include, *same-origin, omit
-            headers: {
-                'Content-Type': 'application/json',
-                // 'Content-Type': 'application/x-www-form-urlencoded',
+            headers:{
+                'Content-Type' : 'application/json',
             },
-            redirect: 'follow', // manual, *follow, error
-            referrer: 'no-referrer', // no-referrer, *client
-            body: JSON.stringify(data), // body data type must match "Content-Type" header
+            credentials: 'include',
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify(data),
         };
+        return header;
+    }
 
-        fetch(url, header)
-            .then(response => response.json())
-            .then(result => {
-                if (result.checked) {
+    @action
+    doPost = () =>{
+        let redirectUrl: string = 'http://localhost:3001/login';
+        let redirectHeader = this.returnObject({
+            "insertId" : this.insertId,
+            "insertPw" : this.insertPw,
+        });
+        fetch(redirectUrl, redirectHeader)
+            .then((res) => {
+                console.log(cookie.loadAll());
+                let logged = cookie.load('checked');
+                if(logged === 'true'){
                     sessionStorage.setItem("id", this.insertId);
                     this.props.setId();
                     this.props.closePopup();
-                } else {
-                    alert("login failed.");
+                }else{
+                    alert('login failed.');
                 }
+            })
+            .then(() => {
+                //
             });
     }
 

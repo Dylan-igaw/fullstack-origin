@@ -3,6 +3,7 @@ import '../css/Home.css';
 import {observable, action} from "mobx";
 import {observer} from "mobx-react";
 import Login from './Login-popup';
+import cookie from 'react-cookies';
 // @ts-ignore
 import logo from "../resource/logo.svg";
 
@@ -30,6 +31,7 @@ export default class Home extends React.Component<any> {
             this.setShowPopup(!this.showPopup);
         } else {
             sessionStorage.clear();
+            cookie.remove('checked');
             this.setLoginId();
         }
     };

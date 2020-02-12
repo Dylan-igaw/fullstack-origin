@@ -22,9 +22,9 @@ function errorPage_test(req, res) {
         'error',
         {
             message: 'error test',
-            error : {
-                status : 404,
-                error : 'test',
+            error: {
+                status: 404,
+                error: 'test',
             }
         }
     );
@@ -67,22 +67,18 @@ function postList(req, res) {
  * @param res
  */
 function loginCheck(req, res) {
-    console.log(req);
     const id = 'test';
     const pw = '123';
     const insertId = req.body.insertId;
     const insertPw = req.body.insertPw;
-    let logged = false;
 
-    if(id === insertId && pw === insertPw) {
-        logged = true;
+    if (id === insertId && pw === insertPw) {
+        res.status(200).cookie('checked', 'true', {
+            expires: new Date(Date.now() + 900000),
+        }).send();
+    }else{
+        res.status(200).send();
     }
-
-    res.status(200).json(
-        {
-            "checked" : logged
-        }
-    );
 }
 
 module.exports = {
