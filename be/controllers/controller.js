@@ -1,11 +1,6 @@
 const crypto = require('crypto');
 const authKey = crypto.createHash('sha512').update('test123').digest("base64");
 
-/**
- * index
- * @param req
- * @param res
- */
 function index(req, res) {
     res.status(200).render(
         'index',
@@ -15,60 +10,6 @@ function index(req, res) {
     );
 }
 
-/**
- * @@error jade test
- * @param req
- * @param res
- */
-function errorPageTest(req, res) {
-    res.status(200).render(
-        'error',
-        {
-            message: 'error test',
-            error: {
-                status: 404,
-                error: 'test',
-            }
-        }
-    );
-}
-
-/**
- * @@test
- * request - json
- * {
- *     "message" : {string}
- * }
- * @param req
- * response - json
- * {
- *     "receive_message" : {string}
- * }
- * @param res
- */
-function postList(req, res) {
-    const user_message = req.body.message;
-    res.status(200).json(
-        {
-            "receive_message": user_message
-        }
-    );
-}
-
-/**
- * react-app login api
- * request
- * {
- *     "insertId" : {string},
- *     "insertPw" : {string}
- * }
- * @param req
- * response
- * {
- *     "checked" : {boolean}
- * }
- * @param res
- */
 function loginCheck(req, res) {
     const receivedId = req.body.id;
     const receivedPw = req.body.password;
@@ -117,11 +58,7 @@ function checkLoginAuth (key) {
 }
 
 module.exports = {
-    //basicAPI: basicAPI,
-    //testAPI: testAPI,
     index: index,
-    errorPageTest: errorPageTest,
-    postList: postList,
     loginCheck: loginCheck,
     getLogList: getLogList,
 };

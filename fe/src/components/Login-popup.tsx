@@ -6,11 +6,12 @@ import {action, observable} from "mobx";
 
 interface LoginProps {
     updateLoginId(): void,
+
     closePopup(): void,
 }
 
 @observer
-export class Login extends React.Component<LoginProps> {
+export default class Login extends React.Component<LoginProps> {
     @observable
     private insertId: string = '';
 
@@ -86,5 +87,3 @@ export class Login extends React.Component<LoginProps> {
         );
     }
 }
-
-export default Login;

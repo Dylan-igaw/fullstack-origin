@@ -1,11 +1,16 @@
 .profile {
     margin-top: 10vh;
-    flex-direction: row;
     background-color: #282c34;
     min-height: 70vh;
     min-width: 100vh;
-    display: flex;
-    justify-content: center;
+    display: table-cell;
+    text-align: center;
+}
+
+.profile-list{
+    margin-top: 100px;
+    text-align: center;
+    color: yellowgreen;
 }
 
 .link {
@@ -18,7 +23,6 @@
 .load-btn {
     width: 200px;
     height: 50px;
-    margin-left: 20px;
     border-width: 1px;
     border-color: white;
 }
