@@ -4,6 +4,8 @@ import {observer} from "mobx-react";
 import {action, observable} from "mobx";
 import {Link} from "react-router-dom";
 
+
+
 @observer
 export default class Profile extends React.Component<any> {
 
@@ -56,7 +58,14 @@ export default class Profile extends React.Component<any> {
                     </button>
                 </>
                 <div className="profile-list">
-                    {JSON.stringify(this.profileList)}
+                    <h1>이름</h1>
+                    <li>{this.profileList.name}</li>
+                    <h1>나이</h1>
+                    <li>{this.profileList.age}</li>
+                    <h1>보유 차량</h1>
+                    {
+                        this.profileList.cars.map()
+                    }
                 </div>
             </div>;
         }
