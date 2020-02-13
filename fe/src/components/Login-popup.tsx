@@ -1,12 +1,11 @@
 import * as React from 'react';
+import {ChangeEvent, FormEvent} from 'react';
 import '../css/Login-popup.css';
 import {observer} from "mobx-react";
 import {action, observable} from "mobx";
-import {ChangeEvent, FormEvent} from "react";
-import cookie from 'react-cookies';
 
 interface LoginProps {
-    setId(): void,
+    updateLoginId(): void,
     closePopup(): void,
 }
 
@@ -30,61 +29,42 @@ export class Login extends React.Component<LoginProps> {
 
     @action
     handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-        this.doPost();
+        this.doLogin();
         event.preventDefault();
-    }
+    };
 
-    /*
-    --HTTP HEADER
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        mode: 'cors', // no-cors, cors, *same-origin
-        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'include,', // include, *same-origin, omit
-        headers: {
-            'Content-Type': 'application/json',
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        redirect: 'follow', // manual, *follow, error
-        referrer: 'no-referrer', // no-referrer, *client
-        body: JSON.stringify(data), // body data type must match "Content-Type" header
-     */
-    returnObject = (insert: object):object => {
-        let data: object = insert;
-        let header: object = {
-            headers:{
-                'Content-Type' : 'application/json',
+    makeRequestHeader = (data: object): object => {
+        return {
+            headers: {
+                'Content-Type': 'application/json',
             },
             credentials: 'include',
             method: 'POST',
             mode: 'cors',
             body: JSON.stringify(data),
         };
-        return header;
-    }
+    };
 
     @action
-    doPost = () =>{
-        let redirectUrl: string = 'http://localhost:3001/login';
-        let redirectHeader = this.returnObject({
-            "insertId" : this.insertId,
-            "insertPw" : this.insertPw,
+    doLogin = () => {
+        const url: string = 'http://localhost:3001/login';
+        const header: object = this.makeRequestHeader({
+            "id": this.insertId,
+            "password": this.insertPw,
         });
-        fetch(redirectUrl, redirectHeader)
-            .then((res) => {
-                console.log(cookie.loadAll());
-                let logged = cookie.load('checked');
-                if(logged === 'true'){
+        fetch(url, header)
+            .then(res => res.json())
+            .then((parserJson) => {
+                if (parserJson.rs) {
+                    console.log(parserJson.msg);
                     sessionStorage.setItem("id", this.insertId);
-                    this.props.setId();
+                    this.props.updateLoginId();
                     this.props.closePopup();
-                }else{
-                    alert('login failed.');
+                } else {
+                    alert(parserJson.msg);
                 }
-            })
-            .then(() => {
-                //
             });
-    }
+    };
 
     render() {
         return (

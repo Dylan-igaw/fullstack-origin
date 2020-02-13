@@ -9,9 +9,11 @@ router.get('/', function(req, res, next) {
 */
 
 router.get('/', apiController.index);
-router.get('/error-test', apiController.errorPage_test);
+router.get('/error-test', apiController.errorPageTest);
 router.post('/post-list', apiController.postList);
 router.post('/login', apiController.loginCheck);
+router.get('/profile', apiController.getLogList);
 
 module.exports = router;
+
 

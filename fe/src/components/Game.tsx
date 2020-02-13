@@ -119,7 +119,7 @@ export default class Game extends React.Component<any, square> {
 
     render() {
         console.log(this.history);
-        let returnHtml: any;
+        let returnHtml: object;
         if (this.loginId === null) {
             returnHtml =
                 <div className="Game">
