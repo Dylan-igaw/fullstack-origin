@@ -1,19 +1,17 @@
 import * as React from 'react';
+import {ChangeEvent, FormEvent} from 'react';
 import '../css/Login-popup.css';
 import {observer} from "mobx-react";
 import {action, observable} from "mobx";
-import {ChangeEvent, FormEvent} from "react";
-
-const id = 'test';
-const pw = '123';
 
 interface LoginProps {
-    setId(): void,
-    closePopup(): void
+    updateLoginId(): void,
+
+    closePopup(): void,
 }
 
 @observer
-export class Login extends React.Component<LoginProps> {
+export default class Login extends React.Component<LoginProps> {
     @observable
     private insertId: string = '';
 
@@ -32,14 +30,41 @@ export class Login extends React.Component<LoginProps> {
 
     @action
     handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-        if (id === this.insertId && pw === this.insertPw) {
-            sessionStorage.setItem("id", id);
-            this.props.setId();
-            this.props.closePopup();
-        } else {
-            alert("login failed:: " + this.insertId + '/' + this.insertPw);
-        }
+        this.doLogin();
         event.preventDefault();
+    };
+
+    makeRequestHeader = (data: object): object => {
+        return {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            method: 'POST',
+            mode: 'cors',
+            body: JSON.stringify(data),
+        };
+    };
+
+    @action
+    doLogin = () => {
+        const url: string = 'http://localhost:3001/login';
+        const header: object = this.makeRequestHeader({
+            "id": this.insertId,
+            "password": this.insertPw,
+        });
+        fetch(url, header)
+            .then(res => res.json())
+            .then((parserJson) => {
+                if (parserJson.rs) {
+                    console.log(parserJson.msg);
+                    sessionStorage.setItem("id", this.insertId);
+                    this.props.updateLoginId();
+                    this.props.closePopup();
+                } else {
+                    alert(parserJson.msg);
+                }
+            });
     };
 
     render() {
@@ -62,5 +87,3 @@ export class Login extends React.Component<LoginProps> {
         );
     }
 }
-
-export default Login;

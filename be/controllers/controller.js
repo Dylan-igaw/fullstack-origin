@@ -1,8 +1,6 @@
-/**
- * index
- * @param req
- * @param res
- */
+const crypto = require('crypto');
+const authKey = crypto.createHash('sha512').update('test123').digest("base64");
+
 function index(req, res) {
     res.status(200).render(
         'index',
@@ -12,83 +10,55 @@ function index(req, res) {
     );
 }
 
-/**
- * @@error jade test
- * @param req
- * @param res
- */
-function errorPage_test(req, res) {
-    res.status(200).render(
-        'error',
-        {
-            message: 'error test',
-            error : {
-                status : 404,
-                error : 'test',
-            }
-        }
-    );
-}
-
-/**
- * @@test
- * request - json
- * {
- *     "message" : {string}
- * }
- * @param req
- * response - json
- * {
- *     "receive_message" : {string}
- * }
- * @param res
- */
-function postList(req, res) {
-    const user_message = req.body.message;
-    res.status(200).json(
-        {
-            "receive_message": user_message
-        }
-    );
-}
-
-/**
- * react-app login api
- * request
- * {
- *     "insertId" : {string},
- *     "insertPw" : {string}
- * }
- * @param req
- * response
- * {
- *     "logged" : {boolean}
- * }
- * @param res
- */
 function loginCheck(req, res) {
-    const id = 'test';
-    const pw = '123';
-    const insertId = req.body.insertId;
-    const insertPw = req.body.insertPw;
-    let logged = false;
+    const receivedId = req.body.id;
+    const receivedPw = req.body.password;
 
-    if(id === insertId && pw === insertPw) {
-        logged = true;
+    if (checkLoginAuth(receivedId+receivedPw)) {
+        res.status(200).cookie('authKey', authKey, {
+            expires: new Date(Date.now() + 900000),
+        }).send({rs:true, msg:'로그인 성공'});
+    }else{
+        res.status(200).send({rs:false, msg:'아이디 또는 패스워드를 다시 확인 해주세요.'});
     }
+}
 
-    res.status(200).json(
-        {
-            "logged" : logged
-        }
-    );
+function getLogList(req, res){
+    const key = req.cookies['authKey'];
+    console.log(key);
+    if(key === authKey){
+        res.status(200).send(
+            {
+                "rs" : true,
+                "message" : "load success.",
+                "data": {
+                    "name": "John",
+                    "age": 30,
+                    "cars": [
+                        {"name": "Ford", "models": ["Fiesta", "Focus", "Mustang"]},
+                        {"name": "BMW", "models": ["320", "X3", "X5"]},
+                        {"name": "Fiat", "models": ["500", "Panda"]}
+                    ]
+                },
+            }
+        );
+    }else{
+        res.status(200).send(
+            {
+                "rs": false,
+                "message": "load failed.",
+            }
+        )
+    }
+}
+
+function checkLoginAuth (key) {
+    key = crypto.createHash('sha512').update(key).digest("base64");
+    return key === authKey;
 }
 
 module.exports = {
-    //basicAPI: basicAPI,
-    //testAPI: testAPI,
     index: index,
-    errorPage_test: errorPage_test,
-    postList: postList,
     loginCheck: loginCheck,
-}
+    getLogList: getLogList,
+};

@@ -4,15 +4,17 @@ import '../css/Game.css';
 import {observer} from "mobx-react";
 import {action, observable} from "mobx";
 import {Component} from "react";
+import validateLogin from "./ValidateLogin";
 
 interface squareProps {
     value: string,
+
     onClick(): void
 }
 
-class Square extends Component<squareProps>{
-    render(){
-        return(
+class Square extends Component<squareProps> {
+    render() {
+        return (
             <button className="square" onClick={this.props.onClick}>
                 {this.props.value}
             </button>
@@ -22,6 +24,7 @@ class Square extends Component<squareProps>{
 
 interface boardProps {
     squares: string[],
+
     onClick(i: number): void
 }
 
@@ -65,7 +68,7 @@ interface square {
 @observer
 export default class Game extends React.Component<any, square> {
     @observable
-    private history: square[] = [{"squares" : Array(9).fill(null)}];
+    private history: square[] = [{"squares": Array(9).fill(null)}];
 
     @observable
     private stepNumber: number = 0;
@@ -74,7 +77,7 @@ export default class Game extends React.Component<any, square> {
     private xIsNext: boolean = true;
 
     @observable
-    private loginId:string | null = sessionStorage.getItem("id");
+    private loginId: string | null = sessionStorage.getItem("id");
 
     @action
     handleClick(i: number) {
@@ -118,46 +121,35 @@ export default class Game extends React.Component<any, square> {
     }
 
     render() {
-        console.log(this.history);
-        let returnHtml: any;
-        if (this.loginId === null) {
-            returnHtml =
-                <div className="Game">
-                    <div className="Game-header">
-                        <Link to={"/"} className={"link"}>로그인 후 이용해 주세요.</Link>
-                    </div>
-                </div>
-        } else {
-            const history = this.history;
-            const current = history[this.stepNumber];
-            const winner = this.calculateWinner(current.squares);
+        const history = this.history;
+        const current = history[this.stepNumber];
+        const winner = this.calculateWinner(current.squares);
 
-            const moves = history.map((step, move) => {
-                //const desc = move ? 'Go to move #' + move : 'Go to game start';
-                const desc = `Go to ${move ? `move # ${move}` : `game start`}`;
-                return (
-                    <li key={move}>
-                        <button onClick={() => this.jumpTo(move)}>{desc}</button>
-                    </li>
-                );
-            });
+        const moves = history.map((step, move) => {
+            const desc = `Go to ${move ? `move # ${move}` : `game start`}`;
+            return (
+                <li key={move}>
+                    <button onClick={() => this.jumpTo(move)}>{desc}</button>
+                </li>
+            );
+        });
+        let status = winner ? `Winner: ${winner}` : `Next player: ${this.xIsNext ? "X" : "O"}`;
 
-            let status = winner ? `Winner: ${winner}` : `Next player: ${this.xIsNext ? "X" : "O"}`;
-
-            returnHtml =
-                <div className="Game">
-                    <div className="Game-header">
-                        <Board
-                            squares={current.squares}
-                            onClick={(i: number) => this.handleClick(i)}
-                        />
-                    </div>
-                    <div className="Game-info">
-                        <div>{status}</div>
-                        <ol>{moves}</ol>
-                    </div>
-                </div>;
-        }
-        return returnHtml;
+        if (validateLogin()) return <div className="Game">
+            <Link to={"/"} className={"link"}>로그인 후 이용해 주세요.</Link>
+        </div>;
+        return <div className="Game">
+            <div className="Game-header">
+                <Board
+                    squares={current.squares}
+                    onClick={(i: number) => this.handleClick(i)}
+                />
+            </div>
+            <div className="Game-info">
+                <div>{status}</div>
+                <ol>{moves}</ol>
+            </div>
+        </div>
     }
+
 }

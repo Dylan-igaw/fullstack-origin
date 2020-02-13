@@ -3,6 +3,7 @@ import '../css/Home.css';
 import {observable, action} from "mobx";
 import {observer} from "mobx-react";
 import Login from './Login-popup';
+import cookie from 'react-cookies';
 // @ts-ignore
 import logo from "../resource/logo.svg";
 
@@ -17,10 +18,10 @@ export default class Home extends React.Component<any> {
     @action
     setShowPopup = (state: boolean) => {
         this.showPopup = state;
-    }
+    };
 
     @action
-    setLoginId = () => {
+    updateLoginId = () => {
         this.loginId = sessionStorage.getItem("id");
     };
 
@@ -30,7 +31,8 @@ export default class Home extends React.Component<any> {
             this.setShowPopup(!this.showPopup);
         } else {
             sessionStorage.clear();
-            this.setLoginId();
+            cookie.remove('authKey');
+            this.updateLoginId();
         }
     };
 
@@ -51,7 +53,7 @@ export default class Home extends React.Component<any> {
                     {(this.loginId === null) ? "Sign In" : "Sign Out"}
                 </button>
 
-                {this.showPopup && <Login closePopup={this.closePopup} setId={this.setLoginId}/>}
+                {this.showPopup && <Login closePopup={this.closePopup} updateLoginId={this.updateLoginId}/>}
             </div>
         );
     }
