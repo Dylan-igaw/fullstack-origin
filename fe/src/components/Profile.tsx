@@ -5,7 +5,6 @@ import {action, observable} from "mobx";
 import {Link} from "react-router-dom";
 
 
-
 @observer
 export default class Profile extends React.Component<any> {
 
@@ -13,11 +12,36 @@ export default class Profile extends React.Component<any> {
     private loginId: string | null = sessionStorage.getItem("id");
 
     @observable
-    private profileList: any = {};
+    private profileListHtml: object | string = '';
 
     @action
-    setProfileData = (data: any) => {
-        this.profileList = data;
+    makeProfileList = (data: any) => {
+        this.profileListHtml = <ul>
+            <li>이름 : {data.name}</li>
+            <li>나이 : {data.age}</li>
+            <li>보유차량
+                <ul>
+                    <li>
+                        {data.cars[0].name}
+                    </li>
+                    <ul>
+                        <li>모델 : {data.cars[0].models.join(', ')}</li>
+                    </ul>
+                    <li>
+                        {data.cars[1].name}
+                    </li>
+                    <ul>
+                        <li>모델 : {data.cars[1].models.join(', ')}</li>
+                    </ul>
+                    <li>
+                        {data.cars[2].name}
+                    </li>
+                    <ul>
+                        <li>모델 : {data.cars[2].models.join(', ')}</li>
+                    </ul>
+                </ul>
+            </li>
+        </ul>;
     }
 
     loadProfile = () => {
@@ -36,7 +60,7 @@ export default class Profile extends React.Component<any> {
                 if (parserJson.rs) {
                     console.log(parserJson.message);
                     console.log(parserJson.data);
-                    this.setProfileData(parserJson.data);
+                    this.makeProfileList(parserJson.data);
                 } else {
                     alert(parserJson.message);
                 }
@@ -58,14 +82,7 @@ export default class Profile extends React.Component<any> {
                     </button>
                 </>
                 <div className="profile-list">
-                    <h1>이름</h1>
-                    <li>{this.profileList.name}</li>
-                    <h1>나이</h1>
-                    <li>{this.profileList.age}</li>
-                    <h1>보유 차량</h1>
-                    {
-                        this.profileList.cars.map()
-                    }
+                    {this.profileListHtml}
                 </div>
             </div>;
         }
