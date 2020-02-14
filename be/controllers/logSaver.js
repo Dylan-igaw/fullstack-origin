@@ -34,7 +34,7 @@ function saveLog(req, res) {
 function viewLog(req, res) {
     const key = req.cookies['authKey'];
     if(key === apiController.authKey) {
-        const sql = "SELECT * FROM LOG2020";
+        const sql = "SELECT * FROM LOG2020 limit 100";
         client.query(sql, (err, response) => {
             if (err) {
                 console.log(err.stack)
