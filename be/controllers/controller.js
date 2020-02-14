@@ -13,7 +13,6 @@ function index(req, res) {
 function loginCheck(req, res) {
     const receivedId = req.body.id;
     const receivedPw = req.body.password;
-
     if (checkLoginAuth(receivedId+receivedPw)) {
         res.status(200).cookie('authKey', authKey, {
             expires: new Date(Date.now() + 900000),
@@ -21,11 +20,12 @@ function loginCheck(req, res) {
     }else{
         res.status(200).send({rs:false, msg:'아이디 또는 패스워드를 다시 확인 해주세요.'});
     }
+    console.log("#### ____login:::: " + checkLoginAuth(receivedId+receivedPw));
 }
 
 function getLogList(req, res){
+    console.log("#### ____getLogList:::: ");
     const key = req.cookies['authKey'];
-    console.log(key);
     if(key === authKey){
         res.status(200).send(
             {
@@ -61,4 +61,5 @@ module.exports = {
     index: index,
     loginCheck: loginCheck,
     getLogList: getLogList,
+    authKey: authKey,
 };

@@ -4,6 +4,8 @@ import {observable, action} from "mobx";
 import {observer} from "mobx-react";
 import Login from './Login-popup';
 import cookie from 'react-cookies';
+import CssBaseline from "@material-ui/core/CssBaseline";
+import { Button } from "@material-ui/core";
 // @ts-ignore
 import logo from "../resource/logo.svg";
 
@@ -19,6 +21,11 @@ export default class Home extends React.Component<any> {
     setShowPopup = (state: boolean) => {
         this.showPopup = state;
     };
+
+    componentDidMount(): void {
+        // @ts-ignore
+        SDK.analysticLogger([window.navigator.userAgent, "pv", window.location.href]);
+    }
 
     @action
     updateLoginId = () => {
@@ -44,14 +51,15 @@ export default class Home extends React.Component<any> {
     render() {
         return (
             <div className="Home">
+                <CssBaseline />
                 <img src={logo} className="Home-logo" alt="logo"/>
                 <p>
                     CREATE REACT APP: test/123
                 </p>
 
-                <button onClick={this.togglePopup}>
+                <Button variant={"outlined"} color="secondary" onClick={this.togglePopup}>
                     {(this.loginId === null) ? "Sign In" : "Sign Out"}
-                </button>
+                </Button>
 
                 {this.showPopup && <Login closePopup={this.closePopup} updateLoginId={this.updateLoginId}/>}
             </div>

@@ -4,7 +4,10 @@ import '../css/Game.css';
 import {observer} from "mobx-react";
 import {action, observable} from "mobx";
 import {Component} from "react";
-import validateLogin from "./ValidateLogin";
+// @ts-ignore
+import validateLogin from './ValidateLogin';
+import CssBaseline from "@material-ui/core/CssBaseline";
+import {Button} from "@material-ui/core";
 
 interface squareProps {
     value: string,
@@ -79,6 +82,11 @@ export default class Game extends React.Component<any, square> {
     @observable
     private loginId: string | null = sessionStorage.getItem("id");
 
+    componentDidMount(): void {
+        // @ts-ignore
+        SDK.analysticLogger([window.navigator.userAgent, "pv", window.location.href]);
+    }
+
     @action
     handleClick(i: number) {
         const history = this.history.slice(0, this.stepNumber + 1);
@@ -129,16 +137,18 @@ export default class Game extends React.Component<any, square> {
             const desc = `Go to ${move ? `move # ${move}` : `game start`}`;
             return (
                 <li key={move}>
-                    <button onClick={() => this.jumpTo(move)}>{desc}</button>
+                    <Button variant={"outlined"} color={"secondary"} onClick={() => this.jumpTo(move)}>{desc}</Button>
                 </li>
             );
         });
         let status = winner ? `Winner: ${winner}` : `Next player: ${this.xIsNext ? "X" : "O"}`;
 
         if (validateLogin()) return <div className="Game">
+            <CssBaseline />
             <Link to={"/"} className={"link"}>로그인 후 이용해 주세요.</Link>
         </div>;
         return <div className="Game">
+            <CssBaseline />
             <div className="Game-header">
                 <Board
                     squares={current.squares}

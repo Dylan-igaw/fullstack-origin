@@ -4,8 +4,9 @@ import './css/Header.css';
 import Home from './components/Home';
 import Profile from "./components/Profile";
 import Game from "./components/Game";
+import Report from "./components/Report";
 
-class App extends React.Component<any, any> {
+export default class App extends React.Component<any, any> {
     render() {
         return (
             <div className="Header">
@@ -14,19 +15,18 @@ class App extends React.Component<any, any> {
                         <Link to="/home" className="Header-link">Home</Link>
                         <Link to="/profile" className="Header-link">Profile</Link>
                         <Link to="/game" className="Header-link">Game</Link>
+                        <Link to="/report" className="Header-link">Report</Link>
                     </nav>
-                    <hr/>
                     <hr/>
                     <Switch>
                         <Route exact path="/" render={() => <Redirect to={'/home'}/>}/>
                         <Route path="/home" component={Home}/>
                         <Route path="/game" component={Game}/>
                         <Route path="/profile" component={Profile}/>
+                        <Route path="/report" component={Report}/>
                     </Switch>
                 </Router>
             </div>
         )
     }
 }
-
-export default App;

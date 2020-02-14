@@ -1,4 +1,4 @@
-.profile {
+.report {
     margin-top: 10vh;
     background-color: #282c34;
     min-height: 100vh;
@@ -7,9 +7,9 @@
     text-align: center;
 }
 
-.profile-list{
+.report-list {
     margin-top: 100px;
-    margin-left: 30%;
+    margin-left: 30px;
     text-align: left;
     color: yellowgreen;
 }

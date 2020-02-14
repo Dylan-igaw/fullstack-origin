@@ -4,6 +4,8 @@ import {observer} from "mobx-react";
 import {action, observable} from "mobx";
 import {Link} from "react-router-dom";
 import validateLogin from "./ValidateLogin";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import {List, ListItem, ListItemText, Button} from "@material-ui/core";
 
 
 interface renderItem {
@@ -13,32 +15,32 @@ interface renderItem {
 class RenderList extends React.Component<renderItem> {
     render() {
         if(this.props.data === null) return '';
-        return <ul>
-            <li>이름 : {this.props.data.name}</li>
-            <li>나이 : {this.props.data.age}</li>
-            <li>보유차량
-                <ul>
-                    <li>
+        return <List>
+            <ListItem>이름 : {this.props.data.name}</ListItem>
+            <ListItem>나이 : {this.props.data.age}</ListItem>
+            <ListItem>보유차량
+                <ListItemText>
+                    <ListItem>
                         {this.props.data.cars[0].name}
-                    </li>
-                    <ul>
-                        <li>모델 : {this.props.data.cars[0].models.join(', ')}</li>
-                    </ul>
-                    <li>
+                    </ListItem>
+                    <List>
+                        <ListItem>모델 : {this.props.data.cars[0].models.join(', ')}</ListItem>
+                    </List>
+                    <ListItem>
                         {this.props.data.cars[1].name}
-                    </li>
-                    <ul>
-                        <li>모델 : {this.props.data.cars[1].models.join(', ')}</li>
-                    </ul>
-                    <li>
+                    </ListItem>
+                    <List>
+                        <ListItem>모델 : {this.props.data.cars[1].models.join(', ')}</ListItem>
+                    </List>
+                    <ListItem>
                         {this.props.data.cars[2].name}
-                    </li>
-                    <ul>
-                        <li>모델 : {this.props.data.cars[2].models.join(', ')}</li>
-                    </ul>
-                </ul>
-            </li>
-        </ul>;
+                    </ListItem>
+                    <List>
+                        <ListItem>모델 : {this.props.data.cars[2].models.join(', ')}</ListItem>
+                    </List>
+                </ListItemText>
+            </ListItem>
+        </List>;
     }
 }
 
@@ -51,13 +53,18 @@ export default class Profile extends React.Component<any> {
     @observable
     private profileList: any = null;
 
+    componentDidMount(): void {
+        // @ts-ignore
+        SDK.analysticLogger([window.navigator.userAgent, "pv", window.location.href]);
+    }
+
     @action
     insertJsonData = (data: any) => {
         this.profileList = data;
     };
 
     loadProfile = () => {
-        const url: string = 'http://localhost:3001/profile';
+        const url: string = 'http://192.168.0.128:3001/profile';
         const header: object = {
             headers: {
                 'Content-Type': 'application/json',
@@ -81,14 +88,16 @@ export default class Profile extends React.Component<any> {
 
     render() {
         if (validateLogin()) return <div className="profile">
+            <CssBaseline />
             <Link to={"/"} className={"link"}>로그인 후 이용해 주세요.</Link>
         </div>;
 
         return <div className="profile">
+            <CssBaseline />
             <>
-                <button className="load-btn" onClick={this.loadProfile}>
+                <Button variant={"contained"} color="primary" className="load-btn" onClick={this.loadProfile}>
                     Load Profile
-                </button>
+                </Button>
             </>
             <div className="profile-list">
                 <RenderList data={this.profileList}/>
