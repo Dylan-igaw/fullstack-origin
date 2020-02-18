@@ -1,0 +1,28 @@
+.report {
+    margin-top: 10vh;
+    background-color: #282c34;
+    min-height: 100vh;
+    min-width: 100vh;
+    text-align: center;
+}
+
+.report-list {
+    margin-top: 100px;
+    margin-left: 30px;
+    text-align: left;
+    color: yellowgreen;
+}
+
+.link {
+    margin-left: 20px;
+    color: white;
+    border-width: 1px;
+    border-color: white;
+}
+
+.load-btn {
+    width: 200px;
+    height: 50px;
+    border-width: 1px;
+    border-color: white;
+}
