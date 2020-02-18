@@ -1,7 +1,7 @@
 const loginController = require('./loginController');
 const DBConnect = require('../DBConnector/db');
 
-function saveLog(req, res) {
+function saveLog(req) {
     const {adid, type, path} = req.body;
     const log = `__saveLog-${adid}-${type}-${path}`;
     const sql = "INSERT INTO LOG2020 (adid, type, path, log, date) VALUES($1, $2, $3, $4, $5) RETURNING *";
