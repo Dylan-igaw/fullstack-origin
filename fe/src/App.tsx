@@ -70,11 +70,40 @@ export default class App extends React.Component<any, any> {
         if (this.loginId === null) {
             this.setShowPopup(!this.showPopup);
         } else {
-            sessionStorage.clear();
-            cookie.remove('authKey');
-            this.updateLoginId();
+            this.doLogout();
         }
     };
+
+    doLogout = () => {
+        const url: string = 'http://192.168.0.128:3001/logout';
+        const header: object = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            method: 'POST',
+            mode: 'cors',
+            sameSite: 'None',
+        };
+        fetch(url, header)
+            .then(res => res.json())
+            .then((parserJson) => {
+                if (parserJson.rs) {
+                    console.log(parserJson.msg);
+                    this.clearLoginInfo();
+                } else {
+                    this.clearLoginInfo();
+                    alert(parserJson.msg);
+                }
+            });
+    };
+
+    @action
+    clearLoginInfo = () => {
+        sessionStorage.clear();
+        cookie.remove('authKey');
+        this.updateLoginId();
+    }
 
     @action
     closePopup = () => {

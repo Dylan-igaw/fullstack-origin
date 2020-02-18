@@ -37,7 +37,7 @@ export default class Report extends React.Component<any> {
         fetch(url, header)
             .then(res => res.json())
             .then((parserJson) => {
-                parserJson.rs ? this.insertJsonData(parserJson.data) : alert(parserJson.message);
+                parserJson.rs ? this.insertJsonData(parserJson.data) : alert(parserJson.msg);
             });
     };
 

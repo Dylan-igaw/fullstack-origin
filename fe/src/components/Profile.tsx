@@ -79,11 +79,11 @@ export default class Profile extends React.Component<any> {
             .then(res => res.json())
             .then((parserJson) => {
                 if (parserJson.rs) {
-                    console.log(parserJson.message);
+                    console.log(parserJson.msg);
                     this.insertJsonData(parserJson.data);
                 } else {
                     this.insertJsonData(null);
-                    alert(parserJson.message);
+                    alert(parserJson.msg);
                 }
             });
     };

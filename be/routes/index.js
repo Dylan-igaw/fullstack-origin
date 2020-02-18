@@ -6,9 +6,10 @@ const loginController = require('../controllers/loginController');
 
 //login
 router.post('/login', loginController.login);
+router.post('/logout', loginController.logout);
 
 //content
-router.post('/profile', contentController.getProfileInfo);
+router.post('/profile', contentController.viewProfile);
 
 //report
 router.post('/saveLog', reportController.saveLog);

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ChangeEvent, FormEvent} from 'react';
+import {ChangeEvent} from 'react';
 import '../css/Login-popup.css';
 import {observer} from "mobx-react";
 import {action, observable} from "mobx";
@@ -53,12 +53,6 @@ export default class Login extends React.Component<LoginProps> {
     @action
     handleChangePw = (event: ChangeEvent<HTMLInputElement>) => {
         this.insertPw = event.target.value;
-    };
-
-    @action
-    handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-        this.doLogin();
-        event.preventDefault();
     };
 
     makeRequestHeader = (data: object): object => {
