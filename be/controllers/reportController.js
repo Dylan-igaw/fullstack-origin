@@ -12,7 +12,7 @@ function saveLog(req, res) {
         if (err) {
             console.log(err.stack)
         } else {
-            fetchController.trResponse(res, "success save.");
+            fetchController.trueResponse(res, "success save.");
             console.log(JSON.stringify(response.rows[0]).substring(0, 100) + "......");
         }
     });
@@ -20,9 +20,9 @@ function saveLog(req, res) {
 
 function viewLog(req, res) {
     console.log("#### getProfileInfo:::: " + req);
-    const key = req.cookies['authKey'];
+    const key = req.cookies[loginController.AUTH_KEY_NAME];
     const result = loginController.checkLoginAuth(key);
-    result.rs ? selectLog(res) : fetchController.faResponse(res, "load failed.");
+    result.rs ? selectLog(res) : fetchController.falseResponse(res, "load failed.");
 
 }
 
@@ -32,12 +32,12 @@ function selectLog(res){
         if (err) {
             console.log(err.stack)
         } else {
-            fetchController.trResponse(res, 'success load.', response.rows);
+            fetchController.trueResponse(res, 'success load.', response.rows);
         }
     });
 }
 
 module.exports = {
-    saveLog: saveLog,
-    viewLog: viewLog,
+    saveLog,
+    viewLog,
 };

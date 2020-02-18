@@ -1,5 +1,5 @@
 
-function trResponse(response, msg, data) {
+function trueResponse(response, msg, data) {
     console.log(msg);
     response.status(200).send({
         "rs": true,
@@ -8,7 +8,7 @@ function trResponse(response, msg, data) {
     });
 }
 
-function faResponse(response, msg) {
+function falseResponse(response, msg) {
     console.log(msg);
     response.status(200).send({
         "rs": false,
@@ -17,6 +17,6 @@ function faResponse(response, msg) {
 }
 
 module.exports = {
-    trResponse: trResponse,
-    faResponse: faResponse,
+    trueResponse,
+    falseResponse,
 };
