@@ -1,5 +1,5 @@
 const loginController = require('./loginController');
-const outData = require('/public/javascripts/profileData');
+const outData = require('../public/javascripts/profileData');
 
 function getProfileInfo(req, res) {
     console.log("#### getProfileInfo:::: " + req);

@@ -6,7 +6,7 @@ function login(req, res) {
     const insertId = req.body.id;
     const insertPw = crypto.createHash('sha512').update(req.body.password).digest("base64");
     const sql = `SELECT ID, PASSWORD FROM USERS WHERE ID='${insertId}' AND PASSWORD='${insertPw}'`;
-
+    console.log("#### login:::: " + req);
     DBConnect.client.query(sql, (err, response) => {
         if (err) {
             fetchController.faResponse(res, "아이디 또는 패스워드를 다시 확인 해주세요.");
