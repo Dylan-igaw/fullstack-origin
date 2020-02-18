@@ -8,11 +8,11 @@ const corsOptions = {
   origin: 'http://localhost:3000',
   credentials: true
 };
-
 const indexRouter = require('./routes/index');
-
+const DBConnect = require('./DBConnector/db');
 const app = express();
 
+DBConnect.client.connect();
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

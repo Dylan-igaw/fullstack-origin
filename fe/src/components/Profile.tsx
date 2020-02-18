@@ -5,7 +5,7 @@ import {action, observable} from "mobx";
 import {Link} from "react-router-dom";
 import validateLogin from "./ValidateLogin";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import {List, ListItem, ListItemText, Button} from "@material-ui/core";
+import {List, ListItem, Button} from "@material-ui/core";
 
 
 interface renderItem {
@@ -14,12 +14,12 @@ interface renderItem {
 
 class RenderList extends React.Component<renderItem> {
     render() {
-        if(this.props.data === null) return '';
+        if (this.props.data === null) return '';
         return <List>
             <ListItem>이름 : {this.props.data.name}</ListItem>
             <ListItem>나이 : {this.props.data.age}</ListItem>
             <ListItem>보유차량
-                <ListItemText>
+                <List>
                     <ListItem>
                         {this.props.data.cars[0].name}
                     </ListItem>
@@ -38,7 +38,7 @@ class RenderList extends React.Component<renderItem> {
                     <List>
                         <ListItem>모델 : {this.props.data.cars[2].models.join(', ')}</ListItem>
                     </List>
-                </ListItemText>
+                </List>
             </ListItem>
         </List>;
     }
@@ -70,8 +70,10 @@ export default class Profile extends React.Component<any> {
                 'Content-Type': 'application/json',
             },
             credentials: 'include',
-            method: 'GET',
+            method: 'POST',
             mode: 'cors',
+            sameSite: 'None',
+            body: JSON.stringify({"id" : sessionStorage.getItem("id")}),
         };
         fetch(url, header)
             .then(res => res.json())
@@ -88,17 +90,15 @@ export default class Profile extends React.Component<any> {
 
     render() {
         if (validateLogin()) return <div className="profile">
-            <CssBaseline />
+            <CssBaseline/>
             <Link to={"/"} className={"link"}>로그인 후 이용해 주세요.</Link>
         </div>;
 
         return <div className="profile">
-            <CssBaseline />
-            <>
-                <Button variant={"contained"} color="primary" className="load-btn" onClick={this.loadProfile}>
-                    Load Profile
-                </Button>
-            </>
+            <CssBaseline/>
+            <Button variant={"contained"} color="primary" className="load-btn" onClick={this.loadProfile}>
+                Load Profile
+            </Button>
             <div className="profile-list">
                 <RenderList data={this.profileList}/>
             </div>

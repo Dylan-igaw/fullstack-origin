@@ -4,11 +4,31 @@ import '../css/Login-popup.css';
 import {observer} from "mobx-react";
 import {action, observable} from "mobx";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import {Input} from "@material-ui/core";
+import {Button, TextField} from "@material-ui/core";
+import {withStyles} from "@material-ui/core/styles";
+
+const StyleTextField = withStyles({
+    root: {
+        width: '150px',
+        marginRight: '10px',
+    },
+})(TextField);
+
+const StyleButton1 = withStyles({
+    root: {
+        height: '56px',
+        marginRight: '10px',
+    },
+})(Button);
+
+const StyleButton2 = withStyles({
+    root: {
+        marginLeft: '80%',
+    },
+})(Button);
 
 interface LoginProps {
     updateLoginId(): void,
-
     closePopup(): void,
 }
 
@@ -49,6 +69,7 @@ export default class Login extends React.Component<LoginProps> {
             credentials: 'include',
             method: 'POST',
             mode: 'cors',
+            sameSite: 'None',
             body: JSON.stringify(data),
         };
     };
@@ -76,22 +97,18 @@ export default class Login extends React.Component<LoginProps> {
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
-                <CssBaseline />
-                <div className="Login-popup">
-                    <div className="Login-inner">
-                        <p>Login <input type="button" className="close-btn" onClick={this.props.closePopup}
-                                        value="close"/></p>
-                        <label htmlFor="id">ID</label> <Input type="text" className="login-input" id="id"
-                                                              value={this.insertId}
-                                                              onChange={this.handleChangeId}/>
-                        <label htmlFor="pw">PW</label> <Input className="login-input" type="password" id="pw"
-                                                              value={this.insertPw}
-                                                              onChange={this.handleChangePw}/>
-                        <input type="submit" value="login"/>
-                    </div>
+            <div className="Login-popup">
+                <div className="Login-inner">
+                    <CssBaseline />
+                    <p>
+                        Login
+                        <StyleButton2 color="inherit" onClick={this.props.closePopup}>close</StyleButton2>
+                    </p>
+                    <StyleTextField id={"id"} label={"id: test"} variant={"outlined"} value={this.insertId} onChange={this.handleChangeId} />
+                    <StyleTextField id={"pw"} type="password" label={"pw: 123"} variant={"outlined"} value={this.insertPw} onChange={this.handleChangePw} />
+                    <StyleButton1 variant={"contained"} color={"primary"} onClick={this.doLogin}>login</StyleButton1>
                 </div>
-            </form>
+            </div>
         );
     }
 }

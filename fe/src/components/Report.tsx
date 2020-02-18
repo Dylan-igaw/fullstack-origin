@@ -23,18 +23,21 @@ export default class Report extends React.Component<any> {
     };
 
     viewLog = () => {
-        fetch("http://192.168.0.128:3001/viewLog",
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include',
-                method: 'GET',
-                mode: 'cors',
-            })
+        const url:string = "http://192.168.0.128:3001/viewLog";
+        const header: object = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            method: 'POST',
+            mode: 'cors',
+            sameSite: 'None',
+            body: JSON.stringify({"id" : sessionStorage.getItem("id")}),
+        };
+        fetch(url, header)
             .then(res => res.json())
             .then((parserJson) => {
-                this.insertJsonData(parserJson);
+                parserJson.rs ? this.insertJsonData(parserJson.data) : alert(parserJson.message);
             });
     };
 

@@ -26,12 +26,16 @@
     -->
     <title>React App</title>
     <script>
-        (function (w, d) {
+        (function (w, d, t, s) {
             w.SDK =  {
-                analysticLogger : (function () {})
+                stack : [],
+                analysticLogger : (function () {
+                    console.log("1. index load");
+                    this.stack.push(arguments);
+                })
             };
-            const targetScript = d.getElementsByTagName('script')[0]; const newScript = d.createElement('script');
-            newScript.src = './origin.js'; newScript.async = true; targetScript.parentNode.insertBefore(newScript, targetScript);
+            t = d.getElementsByTagName('script')[0]; s = d.createElement('script');
+            s.src = './origin.js'; s.async = true; t.parentNode.insertBefore(s, t);
         })(window, document);
     </script>
 </head>

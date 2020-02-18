@@ -1,4 +1,6 @@
 SDK.analysticLogger = function(crawInfo) {
+    console.log("3. redefined logger run");
+    console.log(crawInfo);
 	const data = {
 		"adid" : crawInfo[0],
 		"type" : crawInfo[1],
@@ -13,4 +15,11 @@ SDK.analysticLogger = function(crawInfo) {
             mode: 'cors',
             body: JSON.stringify(data),
     })
-}
+};
+
+(function (s) {
+    s.forEach(e => {
+        console.log("2. backup function run");
+        SDK.analysticLogger(e[0]);
+    });
+}(SDK.stack));

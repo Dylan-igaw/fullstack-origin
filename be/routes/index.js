@@ -1,14 +1,18 @@
 let express = require('express');
 let router = express.Router();
-const apiController = require('../controllers/controller');
-const logController = require('../controllers/logSaver');
+const contentController = require('../controllers/contentController');
+const reportController = require('../controllers/reportController');
+const loginController = require('../controllers/loginController');
 
-router.get('/', apiController.index);
-router.post('/login', apiController.loginCheck);
-router.get('/profile', apiController.getLogList);
+//login
+router.post('/login', loginController.login);
 
-router.post('/saveLog', logController.saveLog);
-router.get('/viewLog', logController.viewLog);
+//content
+router.post('/profile', contentController.getProfileInfo);
+
+//report
+router.post('/saveLog', reportController.saveLog);
+router.post('/viewLog', reportController.viewLog);
 
 module.exports = router;
 
