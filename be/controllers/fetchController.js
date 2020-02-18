@@ -7,10 +7,10 @@ function trResponse(response, msg, data) {
     });
 }
 
-function faResponse(response, log) {
+function faResponse(response, msg) {
     response.status(200).send({
         "rs": false,
-        "message": log,
+        "message": msg,
     });
 }
 
